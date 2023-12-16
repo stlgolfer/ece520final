@@ -11,6 +11,7 @@ import numpy as np
 # visualization tools
 import matplotlib.pyplot as plt
 from cirq.contrib.svg import SVGCircuit
+from keras.utils.vis_utils import plot_model
 
 if __name__ == "__main__":
     # a, b = sympy.symbols('a b')
@@ -76,6 +77,8 @@ if __name__ == "__main__":
     # The full Keras model is built from our layers.
     model = tf.keras.Model(inputs=[circuits_input, commands_input],
                            outputs=expectation)
+    print(model)
+    plot_model(model, to_file='./model.png', show_shapes=True, show_layer_names=True)
     # tf.keras.utils.plot_model(model, show_shapes=True, dpi=70)
     # The command input values to the classical NN.
     commands = np.array([[0], [1]], dtype=np.float32)
@@ -97,7 +100,7 @@ if __name__ == "__main__":
     model.compile(optimizer=optimizer, loss=loss)
     history = model.fit(x=[datapoint_circuits, commands],
                         y=expected_outputs,
-                        epochs=30,
+                        epochs=50,
                         verbose=0)
     plt.plot(history.history['loss'])
     plt.title("Learning to Control a Qubit")
